@@ -1,9 +1,9 @@
 package com.faculdadeuepb.computacao.TADs;
-
+import com.faculdadeuepb.computacao.model.utils.Transformations;
 
 public class Main {
-    public static void main(String[] args) {
-        // Transformations.createFiles();
+    public static void main(String[] args) throws Exception {
+        Transformations.createFiles();
 
         try {
            CsvLinkedList list = TADsTransformations.csvToLinkedList("games_formated_release_data.csv");

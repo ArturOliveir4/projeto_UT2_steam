@@ -6,13 +6,13 @@ import java.util.List;
 import com.faculdadeuepb.computacao.algorithms.MatrixTransformations;
 import com.faculdadeuepb.computacao.model.utils.Date;
 
-
-
 public class CsvLinkedList {
     private CsvNode head;
+    private CsvNode tail; 
 
     public CsvLinkedList(){
         this.head = null;
+        this.tail = null;
     }
 
     public boolean isEmpty(){
@@ -21,49 +21,47 @@ public class CsvLinkedList {
 
     public void add(String[] data){
         CsvNode newNode = new CsvNode(data);
-        if(head == null){
+        if (head == null){
             head = newNode;
-            return;
+            tail = newNode;
+        }else{
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
         }
-
-        CsvNode current = head;
-        while(current.next != null){
-            current = current.next;
-        }
-        current.next = newNode;
     }
 
     public boolean remove(String[] data){
-        if(head == null){
-            return false;
-        }
-
-        if(java.util.Arrays.equals(head.data, data)){
-            head = head.next;
-            return true;
-        }
-
         CsvNode current = head;
-        while (current.next != null && !java.util.Arrays.equals(current.next.data, data)) {
+
+        while (current != null) {
+            if (java.util.Arrays.equals(current.data, data)) {
+                if (current.prev != null)
+                    current.prev.next = current.next;
+                else
+                    head = current.next;
+
+                if (current.next != null)
+                    current.next.prev = current.prev;
+                else
+                    tail = current.prev;
+
+                return true;
+            }
             current = current.next;
         }
-
-        if (current.next == null) return false;
-
-        current.next = current.next.next;
-        return true;
+        return false;
     }
 
     public void print(){
         CsvNode current = head;
         while(current != null){
-            System.out.print(java.util.Arrays.toString(current.data) + " -> ");
+            System.out.print(java.util.Arrays.toString(current.data) + " <-> ");
             current = current.next;
         }
         System.out.println("null");
     }
 
-    // Getter para o head
     public CsvNode getHead() {
         return head;
     }
@@ -73,95 +71,118 @@ public class CsvLinkedList {
             return;
         } 
 
-        CsvNode sorted = null;
-        CsvNode current = head;
-
+        CsvNode current = head.next;
         while(current != null){
-            CsvNode next = current.next;
+            CsvNode key = current;
+            CsvNode prev = current.prev;
+            current = current.next;
 
-            if(sorted == null || Date.checkDateSize(current.data[2], sorted.data[2])){
-                current.next = sorted;
-                sorted = current;
-            }else{
-                CsvNode temp = sorted;
-                while(temp.next != null && !Date.checkDateSize(current.data[2], temp.next.data[2])){
-                    temp = temp.next;
-                }
-                current.next = temp.next;
-                temp.next = current;
+            while(prev != null && Date.checkDateSize(key.data[2], prev.data[2])){
+                prev = prev.prev;
             }
 
-            current = next;
+            if(key.prev != null){
+                key.prev.next = key.next;
+            } 
+
+            if(key.next != null){
+                key.next.prev = key.prev;   
+            } 
+
+            if(prev == null){
+                key.next = head;
+                head.prev = key;
+                key.prev = null;
+                head = key;
+            }else{
+                key.next = prev.next;
+                if (prev.next != null) prev.next.prev = key;
+                prev.next = key;
+                key.prev = prev;
+            }
         }
 
-        head = sorted;
+        CsvNode temp = head;
+        while(temp.next != null) temp = temp.next;
+        tail = temp;
     }
 
-
     public void insertionSortByPrice() {
-        if(head == null || head.next == null){
-            return;
-        } 
+        if(head == null || head.next == null) return;
 
-        CsvNode sorted = null;
-        CsvNode current = head;
-
+        CsvNode current = head.next;
         while(current != null){
-            CsvNode next = current.next;
-            double currentPrice = Double.parseDouble(current.data[6]);
+            CsvNode key = current;
+            CsvNode prev = current.prev;
+            current = current.next;
 
-            if(sorted == null || currentPrice < Double.parseDouble(sorted.data[6])){
-                current.next = sorted;
-                sorted = current;
-            }else{
-                CsvNode temp = sorted;
-                while(temp.next != null && currentPrice >= Double.parseDouble(temp.next.data[6])){
-                    temp = temp.next;
-                }
-                current.next = temp.next;
-                temp.next = current;
+            double keyPrice = Double.parseDouble(key.data[6]);
+
+            while(prev != null && keyPrice < Double.parseDouble(prev.data[6])){
+                prev = prev.prev;
             }
 
-            current = next;
+            if (key.prev != null) key.prev.next = key.next;
+            if (key.next != null) key.next.prev = key.prev;
+
+            if (prev == null) {
+                key.next = head;
+                head.prev = key;
+                key.prev = null;
+                head = key;
+            } else {
+                key.next = prev.next;
+                if (prev.next != null) prev.next.prev = key;
+                prev.next = key;
+                key.prev = prev;
+            }
         }
 
-        head = sorted;
+        CsvNode temp = head;
+        while(temp.next != null) temp = temp.next;
+        tail = temp;
     }
 
     public void insertionSortByAchievements() {
-        if(head == null || head.next == null){
-            return;
-        } 
+        if(head == null || head.next == null) return;
 
-        CsvNode sorted = null;
-        CsvNode current = head;
+        CsvNode current = head.next;
         while(current != null){
-            CsvNode next = current.next;
+            CsvNode key = current;
+            CsvNode prev = current.prev;
+            current = current.next;
 
-            int currentAchievements = MatrixTransformations.safeParseInt(current.data[26]);
+            int keyAch = MatrixTransformations.safeParseInt(key.data[26]);
 
-            if(sorted == null || currentAchievements > safeParseInt(sorted.data[26])){
-                current.next = sorted;
-                sorted = current;
-            }else{
-                CsvNode temp = sorted;
-                while(temp.next != null && currentAchievements <= safeParseInt(temp.next.data[26])){
-                    temp = temp.next;
-                }
-                current.next = temp.next;
-                temp.next = current;
+            while(prev != null && keyAch > safeParseInt(prev.data[26])){
+                prev = prev.prev;
             }
 
-            current = next;
+            if (key.prev != null) key.prev.next = key.next;
+            if (key.next != null) key.next.prev = key.prev;
+
+            if (prev == null) {
+                key.next = head;
+                head.prev = key;
+                key.prev = null;
+                head = key;
+            } else {
+                key.next = prev.next;
+                if (prev.next != null) prev.next.prev = key;
+                prev.next = key;
+                key.prev = prev;
+            }
         }
 
-        head = sorted;
+        CsvNode temp = head;
+        while(temp.next != null) temp = temp.next;
+        tail = temp;
     }
 
     public static int safeParseInt(String s){
-        try{
+        try {
             return Integer.parseInt(s.trim());
-        }catch(Exception e){
+        } catch(Exception e){
             return 0; 
         }
     }
@@ -178,73 +199,54 @@ public class CsvLinkedList {
 
     public void fromArrayList(List<String[]> arrayList) {
         head = null;
+        tail = null;
         for (String[] data : arrayList) {
             add(data);  
         }
     }   
 
-    // --------------- BEST AND WORST CASES -----------------
-
+    // Métodos de ordenação com casos de teste
     public void insertionSortByReleaseDate_bestCase() {
         List<String[]> arrayList = this.toArrayList();
         arrayList.sort(dateComparator);  
-        
         this.fromArrayList(arrayList);
-
         this.insertionSortByReleaseDate();
     }
 
     public void insertionSortByReleaseDate_worstCase() {
         List<String[]> arrayList = this.toArrayList();
-
         arrayList.sort(dateComparator.reversed());
-
         this.fromArrayList(arrayList);
-
         this.insertionSortByReleaseDate();
     }
-
 
     public void insertionSortByPrice_bestCase() {
         List<String[]> arrayList = this.toArrayList();
         arrayList.sort(priceComparator);  
-        
         this.fromArrayList(arrayList);
-
         this.insertionSortByPrice();
     }
 
     public void insertionSortByPrice_worstCase() {
         List<String[]> arrayList = this.toArrayList();
-
         arrayList.sort(priceComparator.reversed());
-
         this.fromArrayList(arrayList);
-
         this.insertionSortByPrice();
     }
-
 
     public void insertionSortByAchievements_bestCase() {
         List<String[]> arrayList = this.toArrayList();
         arrayList.sort(achievementsComparator);  
-        
         this.fromArrayList(arrayList);
-
         this.insertionSortByAchievements();
     }
 
     public void insertionSortByAchievements_worstCase() {
         List<String[]> arrayList = this.toArrayList();
-
         arrayList.sort(achievementsComparator.reversed());
-
         this.fromArrayList(arrayList);
-
         this.insertionSortByAchievements();
     }
-
-
 
     Comparator<String[]> dateComparator = (a, b) -> {
         if (Date.checkDateSize(a[2], b[2])) return -1;
@@ -259,16 +261,8 @@ public class CsvLinkedList {
     };
 
     Comparator<String[]> achievementsComparator = (a, b) -> {
-    int achA = safeParseInt(a[26]);
-    int achB = safeParseInt(b[26]);
-    return Integer.compare(achA, achB); 
-};
-
-
-
-
+        int achA = safeParseInt(a[26]);
+        int achB = safeParseInt(b[26]);
+        return Integer.compare(achA, achB); 
+    };
 }
-
-
-
-
