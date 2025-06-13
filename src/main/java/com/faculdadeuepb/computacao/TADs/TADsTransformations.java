@@ -133,8 +133,6 @@ public class TADsTransformations {
         return tree;
     }
 
-
-    // Método que converte a AVLTree em matriz 
     public static String[][] avlTreeToMatrix(CsvAVLTree tree){
         List<String[]> dataList = new ArrayList<>();
         preOrderTraversal(tree.getRoot(), dataList);
@@ -419,10 +417,107 @@ public class TADsTransformations {
         System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
     }
 
+    public static void createCsv_MergeSortAchievements_MediumCase(CsvLinkedList list) throws IOException{  
+        System.out.println("\nGenerating 'games_achievements_mergeSort_medioCaso.csv'");
+        
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc(); 
+        long memoriaAntes = runtime.totalMemory() - runtime.freeMemory();
 
+        long start = System.nanoTime();
+
+        // Matriz para usar os algoritmos de ordenação, que é eficiente e direto para ordenação
+        String formatedCsvMatrix[][] = TADsTransformations.doublyLinkedListToMatrix(list);
+
+        // Ordenação com insertion sort dentro da matriz
+        formatedCsvMatrix = MergeSort.mergeSort_Achievements(formatedCsvMatrix, formatedCsvMatrix.length); 
+
+        // Fila para manter a ordem dos elementos ordenados de forma simples e sequencial, facilitando a geração do CSV
+        CsvQueue queue = TADsTransformations.matrixToQueue(formatedCsvMatrix);
+
+
+        long end = System.nanoTime();
+        long duration = end - start; 
+
+        long memoriaDepois = runtime.totalMemory() - runtime.freeMemory();
+        long memoriaUsada = memoriaDepois - memoriaAntes;
+
+        // Criando de fato o arquivo .csv
+        createCsv(queue, "games_achievements_mergeSort_medioCaso.csv");
+
+        System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
+    }
+
+    public static void createCsv_MergeSortAchievements_BestCase(CsvLinkedList list) throws IOException{  
+        System.out.println("\nGenerating 'games_achievements_mergeSort_melhorCaso.csv'");
+        
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc(); 
+        long memoriaAntes = runtime.totalMemory() - runtime.freeMemory();
+
+        long start = System.nanoTime();
+
+        // Matriz para usar os algoritmos de ordenação, que é eficiente e direto para ordenação
+        String formatedCsvMatrix[][] = TADsTransformations.doublyLinkedListToMatrix(list);
+
+        // Ordenando previamente a matriz (MELHOR CASO)
+        MatrixTransformations.orderJava_Data_Crescente(formatedCsvMatrix);
+
+        // Ordenação com insertion sort dentro da matriz
+        formatedCsvMatrix = MergeSort.mergeSort_Achievements(formatedCsvMatrix, formatedCsvMatrix.length); 
+
+        // Fila para manter a ordem dos elementos ordenados de forma simples e sequencial, facilitando a geração do CSV
+        CsvQueue queue = TADsTransformations.matrixToQueue(formatedCsvMatrix);
+
+
+        long end = System.nanoTime();
+        long duration = end - start; 
+
+        long memoriaDepois = runtime.totalMemory() - runtime.freeMemory();
+        long memoriaUsada = memoriaDepois - memoriaAntes;
+
+        // Criando de fato o arquivo .csv
+        createCsv(queue, "games_achievements_mergeSort_melhorCaso.csv");
+
+        System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
+    }
+
+    public static void createCsv_MergeSortAchievements_WorstCase(CsvLinkedList list) throws IOException{  
+        System.out.println("\nGenerating 'games_achievements_mergeSort_piorCaso.csv'");
+        
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc(); 
+        long memoriaAntes = runtime.totalMemory() - runtime.freeMemory();
+
+        long start = System.nanoTime();
+
+        // Matriz para usar os algoritmos de ordenação, que é eficiente e direto para ordenação
+        String formatedCsvMatrix[][] = TADsTransformations.doublyLinkedListToMatrix(list);
+
+        // Ordenando previamente a matriz (PIOR CASO)
+        MatrixTransformations.orderJava_Data_Descrescente(formatedCsvMatrix);
+
+        // Ordenação com insertion sort dentro da matriz
+        formatedCsvMatrix = MergeSort.mergeSort_Achievements(formatedCsvMatrix, formatedCsvMatrix.length); 
+
+        // Fila para manter a ordem dos elementos ordenados de forma simples e sequencial, facilitando a geração do CSV
+        CsvQueue queue = TADsTransformations.matrixToQueue(formatedCsvMatrix);
+
+
+        long end = System.nanoTime();
+        long duration = end - start; 
+
+        long memoriaDepois = runtime.totalMemory() - runtime.freeMemory();
+        long memoriaUsada = memoriaDepois - memoriaAntes;
+
+        // Criando de fato o arquivo .csv
+        createCsv(queue, "games_achievements_mergeSort_piorCaso.csv");
+
+        System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
+    }
 
     public static int safeParseInt(String s){
-        try {
+        try{
             return Integer.parseInt(s.trim());
         } catch(Exception e){
             return 0; 
@@ -435,21 +530,22 @@ public class TADsTransformations {
         String dateStrA = a[2];
         String dateStrB = b[2];
 
-        // Se qualquer uma das datas for nula ou vazia, trate como "menor"
-        if (dateStrA == null || dateStrA.isBlank()) return -1;
-        if (dateStrB == null || dateStrB.isBlank()) return 1;
+        if(dateStrA == null || dateStrA.isBlank()){
+            return -1;
+        } 
+        if(dateStrB == null || dateStrB.isBlank()){
+            return 1;
+        } 
 
-        try {
+        try{
             LocalDate dateA = LocalDate.parse(dateStrA, formatter);
             LocalDate dateB = LocalDate.parse(dateStrB, formatter);
             int result = dateA.compareTo(dateB);
             if (result != 0) return result;
 
-            // Desempate estável se as datas forem iguais (ex: comparar por nome, coluna 0)
             return a[0].compareToIgnoreCase(b[0]);
 
-        } catch (Exception e) {
-            // Em caso de data inválida, use fallback estável (ex: comparar as strings diretamente)
+        } catch(Exception e){
             return dateStrA.compareTo(dateStrB);
         }
     };

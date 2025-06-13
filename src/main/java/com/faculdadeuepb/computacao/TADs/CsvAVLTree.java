@@ -17,7 +17,7 @@ public class CsvAVLTree {
         root = insertRecursive(root, data);
     }
 
-    public CsvTreeNode getRoot() {
+    public CsvTreeNode getRoot(){
         return this.root;
     }
 

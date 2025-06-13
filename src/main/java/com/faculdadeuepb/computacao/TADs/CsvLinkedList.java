@@ -60,11 +60,11 @@ public class CsvLinkedList {
         System.out.println("null");
     }
 
-    public CsvNode getHead() {
+    public CsvNode getHead(){
         return head;
     }
 
-    public List<String[]> toArrayList() {
+    public List<String[]> toArrayList(){
         List<String[]> list = new ArrayList<>();
         CsvNode current = head;
         while (current != null) {
@@ -74,10 +74,10 @@ public class CsvLinkedList {
         return list;
     }
 
-    public void fromArrayList(List<String[]> arrayList) {
+    public void fromArrayList(List<String[]> arrayList){
         head = null;
         tail = null;
-        for (String[] data : arrayList) {
+        for(String[] data : arrayList){
             add(data);  
         }
     }   
