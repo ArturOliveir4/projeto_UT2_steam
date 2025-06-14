@@ -2,11 +2,11 @@ package com.faculdadeuepb.computacao.TADs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvLinkedList {
+public class CsvDoubleLinkedList {
     private CsvNode head;
     private CsvNode tail; 
 
-    public CsvLinkedList(){
+    public CsvDoubleLinkedList(){
         this.head = null;
         this.tail = null;
     }

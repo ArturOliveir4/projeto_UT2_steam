@@ -44,9 +44,9 @@ public class TADsTransformations {
     }
 
     // Função que converte o arquivo .csv passado por parâmetro em String em lista encadeada
-    public static CsvLinkedList csvToLinkedList(String csvFileName) throws IOException {
+    public static CsvDoubleLinkedList csvToLinkedList(String csvFileName) throws IOException {
         File csvFile = new File(csvFileName);
-        CsvLinkedList list = new CsvLinkedList();
+        CsvDoubleLinkedList list = new CsvDoubleLinkedList();
 
         CSVParser parser = CSVCreate.initializeCSVParser(csvFile);
         for(CSVRecord record : parser){
@@ -63,9 +63,9 @@ public class TADsTransformations {
     }
 
     // Função para testes
-    public static CsvLinkedList csvToLinkedList1000(String csvFileName) throws IOException {
+    public static CsvDoubleLinkedList csvToLinkedList1000(String csvFileName) throws IOException {
         File csvFile = new File(csvFileName);
-        CsvLinkedList list = new CsvLinkedList();
+        CsvDoubleLinkedList list = new CsvDoubleLinkedList();
 
         CSVParser parser = CSVCreate.initializeCSVParser(csvFile);
         int maxLines = 100;
@@ -90,6 +90,7 @@ public class TADsTransformations {
         return list;
     }
 
+    // Função que gera um arquivo .csv a partir de uma fila (CsvQueue) contendo os dados ordenados. 
     public static void createCsv(CsvQueue queue, String nomeArquivo) throws IOException {
         File outputCsv = new File(nomeArquivo);
 
@@ -106,7 +107,8 @@ public class TADsTransformations {
     }
 
 
-    public static CsvAVLTree convertLinkedListToAVL(CsvLinkedList list, Comparator<String[]> comparator) {
+    //Função que converter Linked List para arvoreAVL
+    public static CsvAVLTree convertLinkedListToAVL(CsvDoubleLinkedList list, Comparator<String[]> comparator) {
         CsvAVLTree tree = new CsvAVLTree(comparator);
         CsvNode current = list.getHead();
         while(current != null){
@@ -116,6 +118,8 @@ public class TADsTransformations {
         return tree;
     }
 
+
+    //Função que converter .csv para arvore AVL
     public static CsvAVLTree csvToAVLTree(String csvFileName, Comparator<String[]> comparator) throws IOException {
         File csvFile = new File(csvFileName);
         CsvAVLTree tree = new CsvAVLTree(comparator);
@@ -133,6 +137,8 @@ public class TADsTransformations {
         return tree;
     }
 
+
+    //Função que converte arvore AVL para Matriz
     public static String[][] avlTreeToMatrix(CsvAVLTree tree){
         List<String[]> dataList = new ArrayList<>();
         preOrderTraversal(tree.getRoot(), dataList);
@@ -162,6 +168,7 @@ public class TADsTransformations {
         preOrderTraversal(node.right, dataList);
     }
 
+    //Função que converte matriz em fila
     public static CsvQueue matrixToQueue(String[][] matriz){
         CsvQueue fila = new CsvQueue();
         for(int i = 0; i < matriz.length; i++){
@@ -170,9 +177,9 @@ public class TADsTransformations {
         return fila;
     }
 
-    public static CsvLinkedList csvToDoublyLinkedList(String csvFileName) throws IOException{
+    public static CsvDoubleLinkedList csvToDoublyLinkedList(String csvFileName) throws IOException{
         File csvFile = new File(csvFileName);
-        CsvLinkedList list = new CsvLinkedList();
+        CsvDoubleLinkedList list = new CsvDoubleLinkedList();
 
         CSVParser parser = CSVCreate.initializeCSVParser(csvFile);
 
@@ -188,7 +195,8 @@ public class TADsTransformations {
         return list;
     }
 
-    public static String[][] doublyLinkedListToMatrix(CsvLinkedList list) {
+    //Função que transforma lista Duplamente encadeada em matriz
+    public static String[][] doublyLinkedListToMatrix(CsvDoubleLinkedList list) {
         int rowCount = 0;
         int columnCount = 0;
 
@@ -318,7 +326,7 @@ public class TADsTransformations {
 
 
 
-    public static void createCsv_MergeSortPrice_MediumCase(CsvLinkedList list) throws IOException{  
+    public static void createCsv_MergeSortPrice_MediumCase(CsvDoubleLinkedList list) throws IOException{  
         System.out.println("\nGenerating 'games_price_mergeSort_medioCaso.csv'");
         
         Runtime runtime = Runtime.getRuntime();
@@ -349,7 +357,7 @@ public class TADsTransformations {
         System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
     }
 
-    public static void createCsv_MergeSortPrice_BestCase(CsvLinkedList list) throws IOException{  
+    public static void createCsv_MergeSortPrice_BestCase(CsvDoubleLinkedList list) throws IOException{  
         System.out.println("\nGenerating 'games_price_mergeSort_melhorCaso.csv'");
         
         Runtime runtime = Runtime.getRuntime();
@@ -383,7 +391,7 @@ public class TADsTransformations {
         System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
     }
 
-    public static void createCsv_MergeSortPrice_WorstCase(CsvLinkedList list) throws IOException{  
+    public static void createCsv_MergeSortPrice_WorstCase(CsvDoubleLinkedList list) throws IOException{  
         System.out.println("\nGenerating 'games_price_mergeSort_piorCaso.csv'");
         
         Runtime runtime = Runtime.getRuntime();
@@ -417,7 +425,7 @@ public class TADsTransformations {
         System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
     }
 
-    public static void createCsv_MergeSortAchievements_MediumCase(CsvLinkedList list) throws IOException{  
+    public static void createCsv_MergeSortAchievements_MediumCase(CsvDoubleLinkedList list) throws IOException{  
         System.out.println("\nGenerating 'games_achievements_mergeSort_medioCaso.csv'");
         
         Runtime runtime = Runtime.getRuntime();
@@ -448,7 +456,7 @@ public class TADsTransformations {
         System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
     }
 
-    public static void createCsv_MergeSortAchievements_BestCase(CsvLinkedList list) throws IOException{  
+    public static void createCsv_MergeSortAchievements_BestCase(CsvDoubleLinkedList list) throws IOException{  
         System.out.println("\nGenerating 'games_achievements_mergeSort_melhorCaso.csv'");
         
         Runtime runtime = Runtime.getRuntime();
@@ -482,7 +490,7 @@ public class TADsTransformations {
         System.out.println("Done\nAverage execution time : " + duration + " ns\nMemory used on average: " + memoriaUsada + " bytes");
     }
 
-    public static void createCsv_MergeSortAchievements_WorstCase(CsvLinkedList list) throws IOException{  
+    public static void createCsv_MergeSortAchievements_WorstCase(CsvDoubleLinkedList list) throws IOException{  
         System.out.println("\nGenerating 'games_achievements_mergeSort_piorCaso.csv'");
         
         Runtime runtime = Runtime.getRuntime();

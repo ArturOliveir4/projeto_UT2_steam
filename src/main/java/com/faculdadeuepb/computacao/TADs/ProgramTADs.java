@@ -15,7 +15,7 @@ public class ProgramTADs {
         TADsTransformations.createCsv_MergeSortReleaseDate_WorstCase(tree);
 
         // Conversão do csv para Lista Duplamente Encadeada | Usamos lista duplamente encadeada para facilitar a inserção e remoção sequencial de elementos, mantendo a ordem original dos dados do CSV sem balanceamento automático 
-        CsvLinkedList list = TADsTransformations.csvToDoublyLinkedList("games_formated_release_data.csv");
+        CsvDoubleLinkedList list = TADsTransformations.csvToDoublyLinkedList("games_formated_release_data.csv");
 
         // Criação dos arquivos ordenados por preço
         TADsTransformations.createCsv_MergeSortPrice_MediumCase(list);
